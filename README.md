@@ -13,7 +13,7 @@
 
 - I’m currently working in the capacity of a **Network Security Engineer**.
 
-- I’m looking to collaborate on **Networking, Cloud, and Cybersecurity** related projects.
+- I’m looking to collaborate on **Networking, Cloud, Cybersecurity, AI, and Cryptography** related projects.
 
 
 <h3 align="left">Connect with me:</h3>

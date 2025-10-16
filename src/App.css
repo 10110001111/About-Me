@@ -96,14 +96,16 @@ body {
 .terminal-input-wrapper {
   position: relative;
   flex: 1;
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .terminal-input-mirror {
-  visibility: hidden;
   white-space: pre;
   font-family: 'Courier New', Courier, monospace;
   font-size: 1rem;
+  color: #00ff00;
+  pointer-events: none;
 }
 
 .terminal-input {
@@ -114,7 +116,7 @@ body {
   background-color: transparent;
   border: none;
   outline: none;
-  color: #00ff00;
+  color: transparent;
   font-family: 'Courier New', Courier, monospace;
   font-size: 1rem;
   padding: 0;
@@ -123,13 +125,11 @@ body {
 }
 
 .terminal-cursor {
-  position: absolute;
-  left: 0;
-  top: 0;
   animation: blink 1s infinite;
   color: #00ff00;
   pointer-events: none;
   white-space: pre;
+  margin-left: 2px;
 }
 
 @keyframes blink {

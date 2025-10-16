@@ -354,7 +354,6 @@ Session terminated. Refresh page to reconnect.
           <div className="terminal-input-line terminal-input-container">
             <span className="terminal-prompt">root@wasi:~$</span>
             <div className="terminal-input-wrapper">
-              <span className="terminal-input-mirror">{input}</span>
               <input
                 ref={inputRef}
                 type="text"
@@ -365,6 +364,7 @@ Session terminated. Refresh page to reconnect.
                 autoFocus
                 spellCheck="false"
               />
+              <span className="terminal-input-mirror">{input}</span>
               <span className="terminal-cursor">▊</span>
             </div>
           </div>

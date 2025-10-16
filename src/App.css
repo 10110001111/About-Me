@@ -60,6 +60,9 @@ body {
 .terminal-input-line {
   display: flex;
   align-items: center;
+}
+
+.terminal-input-container {
   position: relative;
 }
 
@@ -67,6 +70,7 @@ body {
   color: #00ff00;
   margin-right: 0.5rem;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .terminal-input-text {
@@ -89,8 +93,24 @@ body {
   margin: 0;
 }
 
-.terminal-input {
+.terminal-input-wrapper {
+  position: relative;
   flex: 1;
+  display: inline-block;
+}
+
+.terminal-input-mirror {
+  visibility: hidden;
+  white-space: pre;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+}
+
+.terminal-input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
   background-color: transparent;
   border: none;
   outline: none;
@@ -104,9 +124,12 @@ body {
 
 .terminal-cursor {
   position: absolute;
+  left: 0;
+  top: 0;
   animation: blink 1s infinite;
   color: #00ff00;
   pointer-events: none;
+  white-space: pre;
 }
 
 @keyframes blink {

@@ -6,9 +6,8 @@ function App() {
   const [history, setHistory] = useState([]);
   const [commandHistory, setCommandHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [cursorPosition, setCursorPosition] = useState(0);
-  const inputRef = useRef(null);
   const terminalRef = useRef(null);
+  const containerRef = useRef(null);
 
   const ASCII_ART = `
 ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -263,20 +262,12 @@ Session terminated. Refresh page to reconnect.
     }
   }, [history]);
 
-  // Calculate cursor position based on input text
   useEffect(() => {
-    if (inputRef.current) {
-      const span = document.createElement('span');
-      span.style.font = window.getComputedStyle(inputRef.current).font;
-      span.style.visibility = 'hidden';
-      span.style.position = 'absolute';
-      span.style.whiteSpace = 'pre';
-      span.textContent = input || '';
-      document.body.appendChild(span);
-      setCursorPosition(span.offsetWidth);
-      document.body.removeChild(span);
+    // Focus the container on mount
+    if (containerRef.current) {
+      containerRef.current.focus();
     }
-  }, [input]);
+  }, []);
 
   const handleCommand = (cmd) => {
     const trimmedCmd = cmd.trim().toLowerCase();
@@ -314,6 +305,9 @@ Session terminated. Refresh page to reconnect.
         handleCommand(input);
         setInput('');
       }
+    } else if (e.key === 'Backspace') {
+      e.preventDefault();
+      setInput(prev => prev.slice(0, -1));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (commandHistory.length > 0) {
@@ -335,6 +329,9 @@ Session terminated. Refresh page to reconnect.
           setInput(commandHistory[newIndex]);
         }
       }
+    } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      e.preventDefault();
+      setInput(prev => prev + e.key);
     }
   };
 
@@ -344,61 +341,37 @@ Session terminated. Refresh page to reconnect.
         <div 
           ref={terminalRef}
           className="terminal-screen"
-          onClick={() => inputRef.current?.focus()}
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+          onClick={() => containerRef.current?.focus()}
         >
-          {history.map((item, index) => (
-            <div key={index} className="terminal-line">
-              {item.type === 'input' && (
-                <div className="terminal-input-line">
-                  <span className="terminal-prompt">root@wasi:~$</span>
-                  <span className="terminal-input-text">{item.content}</span>
-                </div>
-              )}
-              {item.type === 'output' && (
-                <pre className="terminal-output">
-                  {item.content}
-                </pre>
-              )}
-              {item.type === 'error' && (
-                <pre className="terminal-error">
-                  {item.content}
-                </pre>
-              )}
-            </div>
-          ))}
-          
-          <div className="terminal-input-line terminal-input-container">
-            <span className="terminal-prompt">root@wasi:~$</span>
-            <div className="terminal-input-wrapper">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className="terminal-input"
-                autoFocus
-                spellCheck="false"
-              />
+          <div ref={containerRef} tabIndex={-1} style={{ outline: 'none' }}>
+            {history.map((item, index) => (
+              <div key={index} className="terminal-line">
+                {item.type === 'input' && (
+                  <div className="terminal-input-line">
+                    <span className="terminal-prompt">root@wasi:~$</span>
+                    <span className="terminal-input-text">{item.content}</span>
+                  </div>
+                )}
+                {item.type === 'output' && (
+                  <pre className="terminal-output">
+                    {item.content}
+                  </pre>
+                )}
+                {item.type === 'error' && (
+                  <pre className="terminal-error">
+                    {item.content}
+                  </pre>
+                )}
+              </div>
+            ))}
+            
+            <div className="terminal-input-line terminal-input-container">
+              <span className="terminal-prompt">root@wasi:~$</span>
               <span className="terminal-input-mirror">{input}</span>
               <span className="terminal-cursor">▊</span>
             </div>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="terminal-input"
-              autoFocus
-              spellCheck="false"
-            />
-            <span 
-              className="terminal-cursor"
-              style={{ left: `calc(140px + ${cursorPosition}px)` }}
-            >
-              ▊
-            </span>
           </div>
         </div>
         

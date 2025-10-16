@@ -6,7 +6,6 @@ function App() {
   const [history, setHistory] = useState([]);
   const [commandHistory, setCommandHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [cursorPosition, setCursorPosition] = useState(0);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
 
@@ -263,21 +262,6 @@ Session terminated. Refresh page to reconnect.
     }
   }, [history]);
 
-  // Calculate cursor position based on input text
-  useEffect(() => {
-    if (inputRef.current) {
-      const span = document.createElement('span');
-      span.style.font = window.getComputedStyle(inputRef.current).font;
-      span.style.visibility = 'hidden';
-      span.style.position = 'absolute';
-      span.style.whiteSpace = 'pre';
-      span.textContent = input || '';
-      document.body.appendChild(span);
-      setCursorPosition(span.offsetWidth);
-      document.body.removeChild(span);
-    }
-  }, [input]);
-
   const handleCommand = (cmd) => {
     const trimmedCmd = cmd.trim().toLowerCase();
     
@@ -367,24 +351,22 @@ Session terminated. Refresh page to reconnect.
             </div>
           ))}
           
-          <div className="terminal-input-line">
+          <div className="terminal-input-line terminal-input-container">
             <span className="terminal-prompt">root@wasi:~$</span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="terminal-input"
-              autoFocus
-              spellCheck="false"
-            />
-            <span 
-              className="terminal-cursor"
-              style={{ left: `calc(140px + ${cursorPosition}px)` }}
-            >
-              ▊
-            </span>
+            <div className="terminal-input-wrapper">
+              <span className="terminal-input-mirror">{input}</span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="terminal-input"
+                autoFocus
+                spellCheck="false"
+              />
+              <span className="terminal-cursor">▊</span>
+            </div>
           </div>
         </div>
         

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#000000"/>
+  
+  <!-- Shield shape -->
+  <path d="M 16 4 L 6 8 L 6 16 Q 6 24 16 28 Q 26 24 26 16 L 26 8 Z" 
+        fill="none" 
+        stroke="#00ff00" 
+        stroke-width="2"/>
+  
+  <!-- W letter -->
+  <text x="16" y="20" 
+        font-family="Arial, sans-serif" 
+        font-size="14" 
+        font-weight="bold" 
+        fill="#00ff00" 
+        text-anchor="middle">W</text>
+</svg>

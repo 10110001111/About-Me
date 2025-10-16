@@ -60,6 +60,7 @@ body {
 .terminal-input-line {
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .terminal-prompt {
@@ -98,12 +99,14 @@ body {
   font-size: 1rem;
   padding: 0;
   margin: 0;
+  caret-color: transparent;
 }
 
 .terminal-cursor {
+  position: absolute;
   animation: blink 1s infinite;
   color: #00ff00;
-  margin-left: 2px;
+  pointer-events: none;
 }
 
 @keyframes blink {

@@ -6,6 +6,7 @@ function App() {
   const [history, setHistory] = useState([]);
   const [commandHistory, setCommandHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [cursorPosition, setCursorPosition] = useState(0);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
 
@@ -262,6 +263,21 @@ Session terminated. Refresh page to reconnect.
     }
   }, [history]);
 
+  // Calculate cursor position based on input text
+  useEffect(() => {
+    if (inputRef.current) {
+      const span = document.createElement('span');
+      span.style.font = window.getComputedStyle(inputRef.current).font;
+      span.style.visibility = 'hidden';
+      span.style.position = 'absolute';
+      span.style.whiteSpace = 'pre';
+      span.textContent = input || '';
+      document.body.appendChild(span);
+      setCursorPosition(span.offsetWidth);
+      document.body.removeChild(span);
+    }
+  }, [input]);
+
   const handleCommand = (cmd) => {
     const trimmedCmd = cmd.trim().toLowerCase();
     
@@ -363,7 +379,12 @@ Session terminated. Refresh page to reconnect.
               autoFocus
               spellCheck="false"
             />
-            <span className="terminal-cursor">▊</span>
+            <span 
+              className="terminal-cursor"
+              style={{ left: `calc(140px + ${cursorPosition}px)` }}
+            >
+              ▊
+            </span>
           </div>
         </div>
         
